@@ -7,11 +7,11 @@
 ## Learning Objectives
 
 - SOLID Design Principles:
-  - [Single Responsibility Principle](/solid/single_responsibility.py)
-  - [Open-Closed Principle](/solid/open_closed.py)
-  - [Liskov Substitution Principle](/solid/liskov.py)
-  - [Interface Segregation Principle](/solid/interface_segregation.py)
-  - [Dependency Inversion Principle](/solid/dependency_inversion.py)
+  - [Single Responsibility Principle](/_solid/single_responsibility.py)
+  - [Open-Closed Principle](/_solid/open_closed.py)
+  - [Liskov Substitution Principle](/_solid/liskov.py)
+  - [Interface Segregation Principle](/_solid/interface_segregation.py)
+  - [Dependency Inversion Principle](/_solid/dependency_inversion.py)
 - Creational Design Patterns:
   - [Builder](/builder)
     - A builder is a separate component for building an object

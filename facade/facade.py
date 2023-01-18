@@ -19,13 +19,13 @@ class Buffer:
     def __init__(self, width=30, height=20):
         self.width = width
         self.height = height
-        self.buffer = [' '] * (width * height)
+        self._buffer = [" "] * (width * height)
 
     def write(self, text):
-        self.buffer += text
+        self._buffer += text
 
     def __getitem__(self, item):
-        return self.buffer.__getitem__(item)
+        return self._buffer.__getitem__(item)
 
 
 class Viewport:
@@ -54,6 +54,7 @@ class Console:
     def get_char_at(self, index):
         return self.current_viewport.get_char_at(index)
 
+
 if __name__ == "__main__":
     C = Console()
-    C.write('hello')
+    C.write("hello")

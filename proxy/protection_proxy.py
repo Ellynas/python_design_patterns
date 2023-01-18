@@ -9,8 +9,7 @@ Motivation
 - Types: logging, virtual,  guarding
 
 Proxy vs Decorator
-- Proxy provides identical inferface, decorator provides enhanced 
-  interface
+- Proxy provides identical inferface, decorator provides enhanced interface
 - Decorator typically aggregates (or has reference to) what it is
   decorating; proxy doesn't have to
 - Proxy might not even be working with a materialized object
@@ -22,7 +21,7 @@ class Car:
         self.driver = driver
 
     def drive(self):
-        print(f'Car being driven by {self.driver.name}')
+        print(f"Car being driven by {self.driver.name}")
 
 
 class CarProxy:
@@ -34,7 +33,7 @@ class CarProxy:
         if self.driver.age >= 16:
             self.car.drive()
         else:
-            print('Driver too young')
+            print("Driver too young")
 
 
 class Driver:
@@ -43,6 +42,6 @@ class Driver:
         self.age = age
 
 
-if __name__ == '__main__':
-    CAR = CarProxy(Driver('John', 19))
+if __name__ == "__main__":
+    CAR = CarProxy(Driver("John", 19))
     CAR.drive()

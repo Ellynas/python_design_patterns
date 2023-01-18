@@ -5,38 +5,39 @@ Interpreter
   tokens (parsing)
 """
 
-from enum import Enum
+from enum import Enum, auto
+from typing import Any, List
 
 
 class Token:
     class Type(Enum):
-        INTEGER = 0
-        PLUS = 1
-        MINUS = 2
-        LPAREN = 3
-        RPAREN = 4
+        INTEGER = auto()
+        PLUS = auto()
+        MINUS = auto()
+        LPAREN = auto()
+        RPAREN = auto()
 
     def __init__(self, type, text):
         self.type = type
         self.text = text
 
     def __str__(self):
-        return f'`{self.text}`'
+        return f"`{self.text}`"
 
 
-def lex(input):
-    result = []
+def lex(input) -> List[Token]:
+    tokens: List[Token] = []
 
     i = 0
     while i < len(input):
-        if input[i] == '+':
-            result.append(Token(Token.Type.PLUS, '+'))
-        elif input[i] == '-':
-            result.append(Token(Token.Type.MINUS, '-'))
-        elif input[i] == '(':
-            result.append(Token(Token.Type.LPAREN, '('))
-        elif input[i] == ')':
-            result.append(Token(Token.Type.RPAREN, ')'))
+        if input[i] == "+":
+            tokens.append(Token(Token.Type.PLUS, "+"))
+        elif input[i] == "-":
+            tokens.append(Token(Token.Type.MINUS, "-"))
+        elif input[i] == "(":
+            tokens.append(Token(Token.Type.LPAREN, "("))
+        elif input[i] == ")":
+            tokens.append(Token(Token.Type.RPAREN, ")"))
         else:  # must be a number
             digits = [input[i]]
             for j in range(i + 1, len(input)):
@@ -44,17 +45,17 @@ def lex(input):
                     digits.append(input[j])
                     i += 1
                 else:
-                    result.append(Token(Token.Type.INTEGER,
-                                        ''.join(digits)))
+                    tokens.append(Token(Token.Type.INTEGER, "".join(digits)))
                     break
         i += 1
 
-    return result
+    return tokens
 
 
 # ↑↑↑ lexing ↑↑↑
 
 # ↓↓↓ parsing ↓↓↓
+
 
 class Integer:
     def __init__(self, value):
@@ -63,13 +64,13 @@ class Integer:
 
 class BinaryOperation:
     class Type(Enum):
-        ADDITION = 0
-        SUBTRACTION = 1
+        ADDITION = auto()
+        SUBTRACTION = auto()
 
     def __init__(self):
-        self.type = None
-        self.left = None
-        self.right = None
+        self.type: Any = None
+        self.left: Any = None
+        self.right: Any = None
 
     @property
     def value(self):
@@ -78,12 +79,23 @@ class BinaryOperation:
         elif self.type == self.Type.SUBTRACTION:
             return self.left.value - self.right.value
 
+    @property
+    def is_complete(self):
+        if self.type and self.left and self.right:
+            return True
+        return False
 
-def parse(tokens):
+
+def parse(tokens: List[Token]):
     result = BinaryOperation()
     have_lhs = False
     i = 0
     while i < len(tokens):
+        if result.is_complete:
+            new_left_value = Integer(result.value)
+            result = BinaryOperation()
+            result.left = new_left_value
+            have_lhs = True
         token = tokens[i]
 
         if token.type == Token.Type.INTEGER:
@@ -104,7 +116,7 @@ def parse(tokens):
                     break
                 j += 1
             # preprocess subexpression
-            subexpression = tokens[i + 1:j]
+            subexpression = tokens[i + 1 : j]
             element = parse(subexpression)
             if not have_lhs:
                 result.left = element
@@ -118,14 +130,13 @@ def parse(tokens):
 
 def eval(input):
     tokens = lex(input)
-    print(' '.join(map(str, tokens)))
+    print(" ".join(map(str, tokens)))
 
     parsed = parse(tokens)
-    print(f'{input} = {parsed.value}')
+    print(f"{input} = {parsed.value}")
 
-if __name__ == '__main__':
-    eval('(13+4)-(12+1)')
-    eval('1+(3-4)')
 
-    # this won't work
-    eval('1+2+(3-4)')
+if __name__ == "__main__":
+    eval("(13+4)-(12+1)")
+    eval("1+(3-4)")
+    eval("1+2+(3-4)")

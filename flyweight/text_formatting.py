@@ -11,10 +11,8 @@ class FormattedText:
         result = []
         for i in range(len(self.plain_text)):
             c = self.plain_text[i]
-            result.append(
-                c.upper() if self.caps[i] else c
-            )
-        return ''.join(result)
+            result.append(c.upper() if self.caps[i] else c)
+        return "".join(result)
 
 
 class BetterFormattedText:
@@ -32,9 +30,9 @@ class BetterFormattedText:
             return self.start <= position <= self.end
 
     def get_range(self, start, end):
-        range = self.TextRange(start, end)
-        self.formatting.append(range)
-        return range
+        r = self.TextRange(start, end)
+        self.formatting.append(r)
+        return r
 
     def __str__(self):
         result = []
@@ -44,7 +42,7 @@ class BetterFormattedText:
                 if r.covers(i) and r.capitalize:
                     c = c.upper()
             result.append(c)
-        return ''.join(result)
+        return "".join(result)
 
 
 if __name__ == "__main__":

@@ -1,10 +1,3 @@
-"""
-Adapter
-- a construct which adapts an existing interface X to conform
-  to the required interface Y
-"""
-
-
 class Point:
     def __init__(self, x, y):
         self.x = x
@@ -12,12 +5,12 @@ class Point:
 
 
 def draw_point(p):
-    print('.', end='')
+    print(".", end="")
     return p
 
 
 class Line:
-    def __init__(self, start, end):
+    def __init__(self, start: Point, end: Point):
         self.start = start
         self.end = end
 
@@ -31,31 +24,37 @@ class Rectangle(list):
         self.append(Line(Point(x, y + height), Point(x + width, y + height)))
 
 
-class LineToPointAdapter(list):
-    count = 0
+class LineToPointAdapter:
+    cache = {}
 
-    def __init__(self, line):
+    def __init__(self, line: Line):
+        self.h = hash(line)
+        if self.h in self.cache:
+            return
         super().__init__()
-        self.count += 1
-        print(f'{self.count}: Generating points for line ' +
-              f'[{line.start.x}, {line.start.y}]' +
-              f'[{line.end.x}, {line.end.y}]')
+        print(f"Generating points for line [{line.start.x}, {line.start.y}][{line.end.x}, {line.end.y}]")
 
         left = min(line.start.x, line.end.x)
         right = max(line.start.x, line.end.x)
         top = min(line.start.y, line.end.y)
         bottom = min(line.start.y, line.end.x)
 
+        points = []
+
         if right - left == 0:
             for y in range(top, bottom):
-                self.append(Point(left, y))
+                points.append(Point(left, y))
         elif line.end.y - line.start.y == 0:
             for x in range(left, right):
-                self.append(Point(x, top))
+                points.append(Point(x, top))
+        self.cache[self.h] = points
+
+    def __iter__(self):
+        return iter(self.cache[self.h])
 
 
 def draw(rcs):
-    print('\n\n--- Drawring some stuff ---\n')
+    print("\n\n--- Drawing some stuff ---\n")
     for rc in rcs:
         for line in rc:
             adapter = LineToPointAdapter(line)
@@ -64,8 +63,6 @@ def draw(rcs):
     print()
 
 
-RS = [
-    Rectangle(1, 1, 10, 10),
-    Rectangle(3, 3, 6, 6)
-]
+RS = [Rectangle(1, 1, 10, 10), Rectangle(3, 3, 6, 6)]
+draw(RS)
 draw(RS)

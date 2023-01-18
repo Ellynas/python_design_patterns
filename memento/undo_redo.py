@@ -16,11 +16,11 @@ class BankAccount:
         self.current += 1
         return m
 
-    def restore(self, memento):
+    def restore(self, memento: Memento):
         if memento:
             self.balance = memento.balance
             self.changes.append(memento)
-            self.current = len(self.changes)-1
+            self.current = len(self.changes) - 1
 
     def undo(self):
         if self.current > 0:
@@ -39,18 +39,18 @@ class BankAccount:
         return None
 
     def __str__(self):
-        return f'Balance = {self.balance}'
+        return f"Balance = {self.balance}"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     BA = BankAccount(100)
     BA.deposit(50)
     BA.deposit(25)
     print(BA)
 
     BA.undo()
-    print(f'Undo 1: {BA}')
+    print(f"Undo 1: {BA}")
     BA.undo()
-    print(f'Undo 2: {BA}')
+    print(f"Undo 2: {BA}")
     BA.redo()
-    print(f'Redo 1: {BA}')
+    print(f"Redo 1: {BA}")

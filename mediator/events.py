@@ -21,7 +21,7 @@ class GoalScoredInfo:
 class Player:
     def __init__(self, name, game):
         self.name = name
-        self.game = game
+        self.game: Game = game
         self.goals_scored = 0
 
     def score(self):
@@ -31,17 +31,17 @@ class Player:
 
 
 class Coach:
-    def __init__(self, game):
+    def __init__(self, game: Game):
         game.events.append(self.celebrate_goal)
 
     def celebrate_goal(self, args):
         if isinstance(args, GoalScoredInfo) and args.goals_scored < 3:
-            print(f'Coach says: well done, {args.who_scored}!')
+            print(f"Coach says: well done, {args.who_scored}!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     GAME = Game()
-    PLAYER = Player('Sam', GAME)
+    PLAYER = Player("Sam", GAME)
     COACH = Coach(GAME)
 
     PLAYER.score()  # Coach says: well done, Sam!

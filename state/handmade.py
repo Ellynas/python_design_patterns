@@ -18,38 +18,38 @@ class Trigger(Enum):
     LEFT_MESSAGE = auto()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     rules = {
         State.OFF_HOOK: [
-            (Trigger.CALL_DIALED, State.CONNECTING)
+            (Trigger.CALL_DIALED, State.CONNECTING),
         ],
         State.CONNECTING: [
             (Trigger.HUNG_UP, State.ON_HOOK),
-            (Trigger.CALL_CONNECTED, State.CONNECTED)
+            (Trigger.CALL_CONNECTED, State.CONNECTED),
         ],
         State.CONNECTED: [
             (Trigger.LEFT_MESSAGE, State.ON_HOOK),
             (Trigger.HUNG_UP, State.ON_HOOK),
-            (Trigger.PLACED_ON_HOLD, State.ON_HOLD)
+            (Trigger.PLACED_ON_HOLD, State.ON_HOLD),
         ],
         State.ON_HOLD: [
             (Trigger.TAKEN_OFF_HOLD, State.CONNECTED),
-            (Trigger.HUNG_UP, State.ON_HOOK)
-        ]
+            (Trigger.HUNG_UP, State.ON_HOOK),
+        ],
     }
 
     state = State.OFF_HOOK
     exit_state = State.ON_HOOK
 
     while state != exit_state:
-        print(f'The phone is currently {state}')
+        print(f"The phone is currently {state}")
 
         for i in range(len(rules[state])):
             t = rules[state][i][0]
-            print(f'{i}: {t}')
+            print(f"{i}: {t}")
 
-        idx = int(input('Select a trigger:'))
+        idx = int(input("Select a trigger:"))
         s = rules[state][idx][1]
         state = s
 
-    print('We are done using the phone.')
+    print("We are done using the phone.")

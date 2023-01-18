@@ -27,14 +27,14 @@ class BankAccount:
         self.balance += amount
         return Memento(self.balance)
 
-    def restore(self, memento):
+    def restore(self, memento: Memento):
         self.balance = memento.balance
 
     def __str__(self):
-        return f'Balance = {self.balance}'
+        return f"Balance = {self.balance}"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     BA = BankAccount(100)
     M1 = BA.deposit(50)
     M2 = BA.deposit(25)

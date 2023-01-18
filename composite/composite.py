@@ -13,50 +13,62 @@ Motivation
   - I.e., Foo and Sequence (yielding Foo's) have common APIs
 """
 
+from typing import List
+
 
 class GraphicObject:
     def __init__(self, color=None):
         self.color = color
-        self.children = []
-        self._name = 'Group'
+        self.children: List[GraphicObject] = []
+        self._name = "Group"
 
     @property
     def name(self):
         return self._name
 
-    def _print(self, items, depth):
-        items.append('*' * depth)
+    @name.setter
+    def name(self, name):
+        self._name = name
+
+    def _print(self, items: list, depth):
+        items.append("*" * depth)
         if self.color:
             items.append(self.color)
-        items.append(f'{self.name}\n')
+        items.append(f"{self.name}\n")
         for child in self.children:
             child._print(items, depth + 1)
 
     def __str__(self):
         items = []
         self._print(items, 0)
-        return ''.join(items)
+        return "".join(items)
 
 
 class Circle(GraphicObject):
     @property
     def name(self):
-        return 'Circle'
+        return "Circle"
 
 
 class Square(GraphicObject):
     @property
     def name(self):
-        return 'Square'
+        return "Square"
 
-DRAWING = GraphicObject()
-DRAWING._name = 'My Drawing'
-DRAWING.children.append(Square('Red'))
-DRAWING.children.append(Circle('Yellow'))
 
-GROUP = GraphicObject()
-GROUP.children.append(Circle('Blue'))
-GROUP.children.append(Square('Blue'))
-DRAWING.children.append(GROUP)
+def main():
+    DRAWING = GraphicObject()
+    DRAWING.name = "My Drawing"
+    DRAWING.children.append(Square("Red"))
+    DRAWING.children.append(Circle("Yellow"))
 
-print(DRAWING)
+    GROUP = GraphicObject()
+    GROUP.children.append(Circle("Blue"))
+    GROUP.children.append(Square("Blue"))
+    DRAWING.children.append(GROUP)
+
+    print(DRAWING)
+
+
+if __name__ == "__main__":
+    main()

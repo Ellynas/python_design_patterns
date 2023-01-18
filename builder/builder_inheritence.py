@@ -5,12 +5,11 @@ class Person:
         self.date_of_birth = None
 
     def __str__(self):
-        return f'{self.name} born on {self.date_of_birth} ' + \
-               f'works as {self.position}'
+        return f"{self.name} born on {self.date_of_birth} " + f"works as {self.position}"
 
     @staticmethod
     def new():
-        return PersonBuilder()
+        return PersonBirthDateBuilder()
 
 
 class PersonBuilder:
@@ -38,10 +37,11 @@ class PersonBirthDateBuilder(PersonJobBuilder):
         self.person.date_of_birth = date_of_birth
         return self
 
-PB = PersonBirthDateBuilder()
-ME = PB\
-    .called('Dmitri')\
-    .works_as_a('Quant')\
-    .born('1/1/1980')\
-    .build()
-print(ME)
+
+def main():
+    ME = Person.new().called("Dimitri").works_as_a("Quant").born("1/1/1980").build()
+    print(ME)
+
+
+if __name__ == "__main__":
+    main()

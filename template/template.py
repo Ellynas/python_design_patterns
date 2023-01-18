@@ -15,11 +15,10 @@ Motivation
 """
 
 
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class Game(ABC):
-
     def __init__(self, number_of_players):
         self.number_of_players = number_of_players
         self.current_player = 0
@@ -28,17 +27,25 @@ class Game(ABC):
         self.start()
         while not self.have_winner:
             self.take_turn()
-        print(f'Player {self.winning_player} wins!')
+        print(f"Player {self.winning_player} wins!")
 
-    def start(self): pass
-
-    @property
-    def have_winner(self): pass
-
-    def take_turn(self): pass
+    @abstractmethod
+    def start(self):
+        pass
 
     @property
-    def winning_player(self): pass
+    @abstractmethod
+    def have_winner(self):
+        pass
+
+    @abstractmethod
+    def take_turn(self):
+        pass
+
+    @property
+    @abstractmethod
+    def winning_player(self):
+        pass
 
 
 class Chess(Game):
@@ -48,14 +55,14 @@ class Chess(Game):
         self.turn = 1
 
     def start(self):
-        print(f'Starting chess with {self.number_of_players} players.')
+        print(f"Starting chess with {self.number_of_players} players.")
 
     @property
     def have_winner(self):
         return self.turn == self.max_turns
 
     def take_turn(self):
-        print(f'Turn {self.turn} taken by player {self.current_player}')
+        print(f"Turn {self.turn} taken by player {self.current_player}")
         self.turn += 1
         self.current_player = 1 - self.current_player
 
@@ -64,6 +71,6 @@ class Chess(Game):
         return self.current_player
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     CHESS = Chess()
     CHESS.run()

@@ -22,13 +22,6 @@ class Person(PropertyObservable):
     def age(self):
         return self._age
 
-    # @age.setter
-    # def age(self, value):
-    #   if self._age == value:
-    #     return
-    #   self._age = value
-    #   self.property_changed('age', value)
-
     @age.setter
     def age(self, value):
         if self._age == value:
@@ -37,22 +30,21 @@ class Person(PropertyObservable):
         old_can_vote = self.can_vote
 
         self._age = value
-        self.property_changed('age', value)
+        self.property_changed("age", value)
 
         if old_can_vote != self.can_vote:
-            self.property_changed('can_vote', self.can_vote)
+            self.property_changed("can_vote", self.can_vote)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     def person_changed(name, value):
-        if name == 'can_vote':
-            print(f'Voting status changed to {value}')
+        if name == "can_vote":
+            print(f"Voting status changed to {value}")
 
     P = Person()
-    P.property_changed.append(
-        person_changed
-    )
+    P.property_changed.append(person_changed)
 
     for age in range(16, 21):
-        print(f'Changing age to {age}')
+        print(f"Changing age to {age}")
         P.age = age

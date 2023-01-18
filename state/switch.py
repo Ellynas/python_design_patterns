@@ -7,10 +7,10 @@ class State(Enum):
     UNLOCKED = auto()
 
 
-if __name__ == '__main__':
-    CODE = '1234'
+if __name__ == "__main__":
+    CODE = "1234"
     STATE = State.LOCKED
-    ENTRY = ''
+    ENTRY = ""
 
     while True:
         if STATE == State.LOCKED:
@@ -23,9 +23,9 @@ if __name__ == '__main__':
                 # the CODE is wrong
                 STATE = State.FAILED
         elif STATE == State.FAILED:
-            print('\nFAILED')
-            ENTRY = ''
+            print("\nFAILED")
+            ENTRY = ""
             STATE = State.LOCKED
         elif STATE == State.UNLOCKED:
-            print('\nUNLOCKED')
             break
+    print("\nUNLOCKED")

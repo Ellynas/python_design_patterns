@@ -30,11 +30,12 @@ class Person:
 
 
 def call_doctor(name, address):
-    print(f'A doctor has been called to {address}')
+    print(f"A doctor has been called to {address} for {name}")
 
-if __name__ == '__main__':
-    PERSON = Person('Sherlock', '221B Baker St')
-    PERSON.falls_ill.append(lambda name, addr: print(f'{name} is ill'))
+
+if __name__ == "__main__":
+    PERSON = Person("Sherlock", "221B Baker St")
+    PERSON.falls_ill.append(lambda name, addr: print(f"{name} is ill"))
     PERSON.falls_ill.append(call_doctor)
     PERSON.catch_a_cold()
 

@@ -1,15 +1,17 @@
 # taken from https://tavianator.com/the-visitor-pattern-in-python/
 
+from abc import ABC
+
 
 def _qualname(obj):
     """Get the fully-qualified name of an object (including module)."""
-    return obj.__module__ + '.' + obj.__qualname__
+    return obj.__module__ + "." + obj.__qualname__
 
 
 def _declaring_class(obj):
     """Get the name of the class that declared an object."""
     name = _qualname(obj)
-    return name[:name.rfind('.')]
+    return name[: name.rfind(".")]
 
 
 # Stores the actual visitor methods
@@ -39,20 +41,26 @@ def visitor(arg_type):
 
 # ↑↑↑ LIBRARY CODE ↑↑↑
 
-class DoubleExpression:
+
+class Expression(ABC):
+    def accept(self, visitor: "ExpressionPrinter"):
+        pass
+
+
+class DoubleExpression(Expression):
     def __init__(self, value):
         self.value = value
 
-    def accept(self, visitor):
+    def accept(self, visitor: "ExpressionPrinter"):
         visitor.visit(self)
 
 
-class AdditionExpression:
+class AdditionExpression(Expression):
     def __init__(self, left, right):
-        self.left = left
-        self.right = right
+        self.left: Expression = left
+        self.right: Expression = right
 
-    def accept(self, visitor):
+    def accept(self, visitor: "ExpressionPrinter"):
         visitor.visit(self)
 
 
@@ -61,30 +69,24 @@ class ExpressionPrinter:
         self.buffer = []
 
     @visitor(DoubleExpression)
-    def visit(self, de):
+    def visit(self, de: DoubleExpression):
         self.buffer.append(str(de.value))
 
     @visitor(AdditionExpression)
-    def visit(self, ae):
-        self.buffer.append('(')
+    def visit(self, ae: AdditionExpression):
+        self.buffer.append("(")
         ae.left.accept(self)
-        self.buffer.append('+')
+        self.buffer.append("+")
         ae.right.accept(self)
-        self.buffer.append(')')
+        self.buffer.append(")")
 
     def __str__(self):
-        return ''.join(self.buffer)
+        return "".join(self.buffer)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # represents 1+(2+3)
-    E = AdditionExpression(
-        DoubleExpression(1),
-        AdditionExpression(
-            DoubleExpression(2),
-            DoubleExpression(3)
-        )
-    )
+    E = AdditionExpression(DoubleExpression(1), AdditionExpression(DoubleExpression(2), DoubleExpression(3)))
     BUFFER = []
     printer = ExpressionPrinter()
     printer.visit(E)

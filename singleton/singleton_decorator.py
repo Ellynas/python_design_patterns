@@ -1,3 +1,5 @@
+# this works !
+
 def singleton(class_):
     instances = {}
 
@@ -9,13 +11,17 @@ def singleton(class_):
     return get_instance
 
 
-# decorator
 @singleton
 class Database:
-    def __init__(self):
-        print('Loading database')
+    def __init__(self) -> None:
+        print("loading Database")
 
-D1 = Database()
-D2 = Database()
 
-print(D1 == D2)
+def main():
+    db1 = Database()
+    db2 = Database()
+    print(db1 == db2)
+
+
+if __name__ == "__main__":
+    main()

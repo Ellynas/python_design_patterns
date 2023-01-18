@@ -13,18 +13,32 @@ Command Query Separation
 
 
 class Creature:
+
+    BASE_ATTACK = 1
+    BASE_DEFENSE = 1
+
     def __init__(self, name, attack, defense):
         self.defense = defense
         self.attack = attack
         self.name = name
 
     def __str__(self):
-        return f'{self.name} ({self.attack}/{self.defense})'
+        return f"{self.name} ({self.attack}/{self.defense})"
+
+
+class Goblin(Creature):
+
+    BASE_ATTACK = 1
+    BASE_DEFENSE = 1
+    BASE_NAME = "Goblin"
+
+    def __init__(self, name=BASE_NAME, attack=BASE_ATTACK, defense=BASE_DEFENSE):
+        super().__init__(name, attack, defense)
 
 
 class CreatureModifier:
     def __init__(self, creature):
-        self.creature = creature
+        self.creature: Creature = creature
         self.next_modifier = None
 
     def add_modifier(self, modifier):
@@ -40,12 +54,14 @@ class CreatureModifier:
 
 class NoBonusesModifier(CreatureModifier):
     def handle(self):
-        print('No bonuses for you!')
+        print("No bonuses for you!")
+        self.creature.attack = self.creature.BASE_ATTACK
+        self.creature.defense = self.creature.BASE_DEFENSE
 
 
 class DoubleAttackModifier(CreatureModifier):
     def handle(self):
-        print(f'Doubling {self.creature.name}''s attack')
+        print(f"Doubling {self.creature.name}'s attack")
         self.creature.attack *= 2
         super().handle()
 
@@ -53,24 +69,25 @@ class DoubleAttackModifier(CreatureModifier):
 class IncreaseDefenseModifier(CreatureModifier):
     def handle(self):
         if self.creature.attack <= 2:
-            print(f'Increasing {self.creature.name}''s defense')
+            print(f"Increasing {self.creature.name}" "s defense")
             self.creature.defense += 1
         super().handle()
 
 
-if __name__ == '__main__':
-    GOBLIN = Creature('Goblin', 1, 1)
+if __name__ == "__main__":
+    GOBLIN = Goblin()
     print(GOBLIN)
 
     ROOT = CreatureModifier(GOBLIN)
 
-    ROOT.add_modifier(NoBonusesModifier(GOBLIN))
+    # this one blocks the chain (no call to super().handle(), so no propagation)
+    # ROOT.add_modifier(NoBonusesModifier(GOBLIN))
 
-    ROOT.add_modifier(DoubleAttackModifier(GOBLIN))
-    ROOT.add_modifier(DoubleAttackModifier(GOBLIN))
-
-    # no effect
     ROOT.add_modifier(IncreaseDefenseModifier(GOBLIN))
+    ROOT.add_modifier(DoubleAttackModifier(GOBLIN))
+    ROOT.add_modifier(DoubleAttackModifier(GOBLIN))
+
+    # ROOT.add_modifier(NoBonusesModifier(GOBLIN))
 
     ROOT.handle()  # apply modifiers
     print(GOBLIN)

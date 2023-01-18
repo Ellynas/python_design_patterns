@@ -14,8 +14,8 @@ Motivation
 """
 
 
-from abc import ABC
-from enum import Enum
+from abc import ABC, abstractmethod
+from enum import Enum, auto
 
 
 class BankAccount:
@@ -26,40 +26,44 @@ class BankAccount:
 
     def deposit(self, amount):
         self.balance += amount
-        print(f'Deposited {amount}, balance = {self.balance}')
+        print(f"Deposited {amount}, balance = {self.balance}")
 
-    def withdraw(self, amount):
+    def withdraw(self, amount) -> bool:
         if self.balance - amount >= BankAccount.OVERDRAFT_LIMIT:
             self.balance -= amount
-            print(f'Withdrew {amount}, balance = {self.balance}')
+            print(f"Withdrew {amount}, balance = {self.balance}")
             return True
         return False
 
     def __str__(self):
-        return f'Balance = {self.balance}'
+        return f"Balance = {self.balance}"
 
 
-# optional
 class Command(ABC):
-    def invoke(self):
+    @abstractmethod
+    def __call__(self):
         pass
 
+    @abstractmethod
     def undo(self):
         pass
 
 
 class BankAccountCommand(Command):
-    def __init__(self, account, action, amount):
+    def __init__(self, account: BankAccount, action: "BankAccountCommand.Action", amount: int):
         self.amount = amount
         self.action = action
         self.account = account
         self.success = None
 
     class Action(Enum):
-        DEPOSIT = 0
-        WITHDRAW = 1
+        DEPOSIT = auto()
+        WITHDRAW = auto()
 
-    def invoke(self):
+    def __call__(self):
+        if self.success:
+            print("already called that command, make a new one, aborting")
+            return
         if self.action == self.Action.DEPOSIT:
             self.account.deposit(self.amount)
             self.success = True
@@ -76,20 +80,26 @@ class BankAccountCommand(Command):
             self.account.withdraw(self.amount)
         elif self.action == self.Action.WITHDRAW:
             self.account.deposit(self.amount)
+        self.success = None
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     BA = BankAccount()
     CMD = BankAccountCommand(BA, BankAccountCommand.Action.DEPOSIT, 100)
-    CMD.invoke()
-    print('After $100 deposit:', BA)
+    CMD()
+    print("After $100 deposit:", BA)
+
+    CMD()
+    print("After a second call for a $100 deposit:", BA)
 
     CMD.undo()
-    print('$100 deposit undone:', BA)
+    print("$100 deposit undone:", BA)
 
-    ILLEGAL_CMD = BankAccountCommand(BA,
-                                     BankAccountCommand.Action.WITHDRAW, 1000)
-    ILLEGAL_CMD.invoke()
-    print('After impossible withdrawal:', BA)
+    CMD.undo()
+    print("$100 deposit undone again ?", BA)
+
+    ILLEGAL_CMD = BankAccountCommand(BA, BankAccountCommand.Action.WITHDRAW, 1000)
+    ILLEGAL_CMD()
+    print("After impossible withdrawal:", BA)
     ILLEGAL_CMD.undo()
-    print('After undo:', BA)
+    print("After undo:", BA)
