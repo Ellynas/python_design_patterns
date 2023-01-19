@@ -14,20 +14,18 @@ class Journal:
 
     def add_entry(self, text):
         self.count += 1
-        self.entries.append(f'{self.count}: {text}')
+        self.entries.append(f"{self.count}: {text}")
 
     def remove_entry(self, pos):
         del self.entries[pos]
 
     def __str__(self):
-        return '\n'.join(self.entries)
+        return "\n".join(self.entries)
 
-# methods below give class responsibility of persistence, bad idea!
-
+    # methods below give class responsibility of persistence, bad idea!
     def save(self, filename):
-        file = open(filename, 'w')
-        file.write(str(self))
-        file.close()
+        with open(filename, "w") as f:
+            f.write(str(self))
 
     def load(self, filename):
         pass
@@ -35,20 +33,19 @@ class Journal:
     def load_from_web(self, url):
         pass
 
+
 J = Journal()
-J.add_entry('I cried today.')
-J.add_entry('I ate a bug.')
-print(f'Journal entries:\n{J}')
+J.add_entry("I cried today.")
+J.add_entry("I ate a bug.")
+print(f"Journal entries:\n{J}")
 
 
-# instead, create another class to handle that responsibility
-class PersistenceManager:
-
+class PersistenceManager :
+    # instead, create another class to handle that responsibility
     @staticmethod
-    def save_to_file(self, journal, filename):
-        file = open(filename, 'w')
-        file.write(str(self))
-        file.close()
+    def save_to_file(journal, filename):
+        with open(filename, "w") as f:
+            f.write(str(journal))
 
     def load(self, filename):
         pass

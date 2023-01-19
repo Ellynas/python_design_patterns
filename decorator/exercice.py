@@ -1,3 +1,13 @@
+"""
+You are given two types, Circle and Square, and a decorator called ColoredShape.
+
+The decorator adds the color to the string output for a given shape, just as we did in the lecture.
+
+There's a trick though: the decorator now has a resize() method that should resize the underlying shape. However, only the Circle has a resize() method; the Square does not — do not add it!
+
+You are asked to complete the implementation of Circle, Square and ColoredShape.
+"""
+
 import unittest
 
 

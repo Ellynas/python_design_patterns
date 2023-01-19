@@ -27,6 +27,7 @@ class Product:
 
 
 class ProductFilter:
+    # bad implementation, doesn't respect the OCP
     def filter_by_color(self, products, color):
         for p in products:
             if p.color == color:
@@ -80,8 +81,7 @@ class AndSpecification(Specification):
         self.spec1 = spec1
 
     def is_satisfied(self, item):
-        return self.spec1.is_satisfied(item) and \
-               self.spec2.is_satisfied(item)
+        return self.spec1.is_satisfied(item) and self.spec2.is_satisfied(item)
 
 
 class BetterFilter(Filter):
@@ -90,30 +90,35 @@ class BetterFilter(Filter):
             if spec.is_satisfied(item):
                 yield item
 
-APPLE = Product('Apple', Color.GREEN, Size.SMALL)
-TREE = Product('Tree', Color.GREEN, Size.LARGE)
-HOUSE = Product('House', Color.BLUE, Size.LARGE)
+
+APPLE = Product("Apple", Color.GREEN, Size.SMALL)
+TREE = Product("Tree", Color.GREEN, Size.LARGE)
+HOUSE = Product("House", Color.BLUE, Size.LARGE)
 
 PRODUCTS = [APPLE, TREE, HOUSE]
+
+# old method (doesn't respect OCP)
 PF = ProductFilter()
 print("Green products (old):")
 for p in PF.filter_by_color(PRODUCTS, Color.GREEN):
-    print(f' - {p.name} is green')
+    print(f" - {p.name} is green")
 
+
+# new method
 BF = BetterFilter()
 print("Green products (new):")
 GREEN = ColorSpecification(Color.GREEN)
 for p in BF.filter(PRODUCTS, GREEN):
-    print(f' - {p.name} is green')
+    print(f" - {p.name} is green")
 
 print("Large products:")
 LARGE = SizeSpecification(Size.LARGE)
 for p in BF.filter(PRODUCTS, LARGE):
-    print(f' - {p.name} is large')
+    print(f" - {p.name} is large")
 
 print("Large blue items:")
 # large_blue = AndSpecification(large, ColorSpecification(Color.BLUE))
 # using python's and
 large_blue = LARGE and ColorSpecification(Color.BLUE)
 for p in BF.filter(PRODUCTS, large_blue):
-    print(f' - {p.name} is large and blue')
+    print(f" - {p.name} is large and blue")

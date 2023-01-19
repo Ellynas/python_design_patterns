@@ -1,3 +1,8 @@
+"""
+Given the following definition of a Node, please implement preorder traversal right inside Node.
+The sequence returned should be the sequence of values, not their containing nodes.
+"""
+
 from typing import Optional, Iterator, Iterable
 
 
@@ -22,6 +27,7 @@ class InOrderIterator(Iterator):
     """
     problem with that : it cannot be recursive, leading to a more complicated implementation
     """
+
     def __init__(self, root: Node):
         self.root: Node = root
         self.current: Node = self.root
@@ -55,6 +61,7 @@ def traverse_in_order(root: Node):
     """
     recursive implem
     """
+
     def traverse(current: Node) -> Iterator[Node]:
         if current.left:
             for left in traverse(current.left):

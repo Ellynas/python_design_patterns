@@ -20,8 +20,7 @@ class Person:
 
 
 # solution
-class RelationshipBrowser():
-
+class RelationshipBrowser:
     @abstractmethod
     def find_all_children(self, name):
         pass
@@ -33,12 +32,8 @@ class Relationships(RelationshipBrowser):
         self.relations = []
 
     def add_parent_and_child(self, parent, child):
-        self.relations.append(
-            (parent, Relationship.PARENT, child)
-        )
-        self.relations.append(
-            (child, Relationship.CHILD, parent)
-        )
+        self.relations.append((parent, Relationship.PARENT, child))
+        self.relations.append((child, Relationship.CHILD, parent))
 
     # solution
     def find_all_children_of(self, name):
@@ -58,12 +53,13 @@ class Research:
 
     # solution
     def __init__(self, browser):
-        for p in browser.find_all_children_of('John'):
-            print(f'John has a child called {p}')
+        for p in browser.find_all_children_of("John"):
+            print(f"John has a child called {p}")
 
-PARENT = Person('John')
-CHILD1 = Person('Chris')
-CHILD2 = Person('Matt')
+
+PARENT = Person("John")
+CHILD1 = Person("Chris")
+CHILD2 = Person("Matt")
 
 RL = Relationships()
 RL.add_parent_and_child(PARENT, CHILD1)
