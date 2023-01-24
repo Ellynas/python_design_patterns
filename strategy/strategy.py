@@ -13,7 +13,7 @@ Motivation
 """
 
 
-from abc import ABC
+from abc import ABC, abstractmethod
 from enum import Enum, auto
 
 
@@ -24,12 +24,15 @@ class OutputFormat(Enum):
 
 # not required but a good idea
 class ListStrategy(ABC):
+    @abstractmethod
     def start(self, buffer: list):
         pass
 
+    @abstractmethod
     def end(self, buffer: list):
         pass
 
+    @abstractmethod
     def add_list_item(self, buffer: list, item):
         pass
 

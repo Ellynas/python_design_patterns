@@ -18,15 +18,15 @@ Proxy vs Decorator
 
 class Car:
     def __init__(self, driver):
-        self.driver = driver
+        self.driver: Driver = driver
 
     def drive(self):
         print(f"Car being driven by {self.driver.name}")
 
 
-class CarProxy:
+class CarProxy(Car):
     def __init__(self, driver):
-        self.driver = driver
+        self.driver: Driver = driver
         self.car = Car(driver)
 
     def drive(self):
@@ -45,3 +45,5 @@ class Driver:
 if __name__ == "__main__":
     CAR = CarProxy(Driver("John", 19))
     CAR.drive()
+    CAR2 = CarProxy(Driver("Jane", 15))
+    CAR2.drive()

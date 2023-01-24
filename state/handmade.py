@@ -49,7 +49,6 @@ if __name__ == "__main__":
             print(f"{i}: {t}")
 
         idx = int(input("Select a trigger:"))
-        s = rules[state][idx][1]
-        state = s
+        state = rules[state][idx][1]
 
     print("We are done using the phone.")

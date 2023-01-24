@@ -1,6 +1,6 @@
 """
 Bridge
-- A mechanism that decouples an interface (hierarchy) from an implementation
+- A mechanism that decouples an interface/abstraction (hierarchy) from an implementation
   (hierarchy)
 Motivation
 - Prevents a 'Cartesian product' complexity explosion

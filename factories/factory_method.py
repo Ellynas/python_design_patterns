@@ -2,6 +2,7 @@ from math import cos, sin
 
 
 class Point(object):
+    # idealy you want the cnstructor to be private, but it's impossible in python
     def __init__(self, x: float, y: float):
         self.x: float = x
         self.y: float = y
@@ -19,7 +20,7 @@ class Point(object):
 
 
 def main():
-    p = Point(2, 3)
+    p = Point.new_cartesian_point(2, 3)
     print(p)
     p2 = Point.new_polar_point(1, 2)
     print(p2)
